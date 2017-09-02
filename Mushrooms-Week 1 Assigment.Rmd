@@ -1,0 +1,114 @@
+---
+title: "Assigment1-Loading Data into a Data Frame"
+author: "Durley Torres-Marin"
+date: "August 31, 2017"
+output: html_document
+---
+Data Set Information:
+---
+"This data set includes descriptions of hypothetical samples corresponding to 23 species of gilled mushrooms in the Agaricus and Lepiota Family (pp. 500-525). Each species is identified as definitely edible, definitely poisonous, or of unknown edibility and not recommended. This latter class was combined with the poisonous one"
+
+This data set is as an example of Categorical data which assigns numbers or characters to represent different categories of answers. These types of data can't be arithmetically manipulated.
+
+The best way to summarize categorical data is with frequencies.  Frequencies can also be translated into percentages to show what percentage of the total sample answered in each category. 
+
+---
+Importing Data as a CSV file - no header was found, Header=FALSE
+---
+```{r}
+Mushrooms <- read.csv(url("https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data"), header = FALSE)
+head.matrix(x = Mushrooms, 6L)
+```
+---
+What type of thing data is
+---
+```{r}
+class(Mushrooms)
+```
+```{r}
+dim(Mushrooms)
+```
+---
+Creating the data set with a subset with sequences
+we can use the c() combine function to address non-sequential rows and columns.
+---
+```{r}
+Mushrooms1 <- Mushrooms[,c(1,6,14,21,22,23)]
+head.matrix(x = Mushrooms1, 6L)
+```
+---
+The columns were selected base on the attributes and rules given to identify and or avoid poisonous mushrooms 
+
+Attribute Information
+
+classification : Poisonous or edible 
+odor: almond=a, anise=l, creosote=c, fishy=y, foul=f, musty=m, none=n, pungent=p,           spicy=s
+stalk-surface-below-ring: fibrous=f, scaly=y, silky=k, smooth=s
+spore-print-color: black=k, brown=n, buff=b, chocolate=h, green=r, orange=o, purple=u,       white=w, yellow=y
+population: abundant=a, clustered=c, numerous=n, scattered=s, several=v, solitary=y
+Habitat : grasses=g,leaves=l, meadows=m, paths=p, urban=u, waste=w, woods=d
+---
+Renaming columns
+```{r}
+names(Mushrooms1) = c("classification", "odor", "stalk-sbr", "spore-pr-c", "population", "habitat")
+names(Mushrooms1)
+```
+Subsetting data 
+Data set of Edible Mushrooms -  4280 instances
+
+```{r}
+edible_mushrooms <- Mushrooms1
+edible_mushrooms = subset(Mushrooms1, classification == "e")
+head.matrix(x = edible_mushrooms, 6L)
+```
+Data set of Poisonous Mushrooms - 3750 instances
+
+```{r}
+poisonous_mushrooms <- Mushrooms1
+poisonous_mushrooms = subset(Mushrooms1, classification == "p")
+head.matrix(x = poisonous_mushrooms, 6L)
+```
+updating a subset value 'e' as 'edible
+
+```{r}
+edible_mushrooms$classification <- ifelse(edible_mushrooms$classification== 'e', 'edible', edible_mushrooms$classification)
+head.matrix(x = edible_mushrooms, 3L)
+```
+
+The attribute that is the best predictive analysis might be habitat that can tell us where the poisonous mushrooms can be found mean while edible mushrooms. 
+
+Frequency distribution analysis using Bar Graphs using X axis = classification and Y axis = percentage
+
+could answer questions like;
+
+How many edible or poisonous mushrooms are in the data set? 	Results in frecuencies and/or percentages
+```{r}
+count = table(Mushrooms1$classification)
+t = as.data.frame(count)
+names(t)[1] = 'classification'
+t
+
+```
+
+What is the habitat with more frecuency for poisonous mushrooms or edible mushrooms?
+Possible habitat values: grasses=g,leaves=l, meadows=m, paths=p, urban=u, waste=w, woods=d
+
+```{r}
+count = table(Mushrooms1$classification, Mushrooms1$habitat)
+t = as.data.frame(count)
+names(t)[1] = 'classification'
+names(t)[2] = 'habitat'
+t
+
+```
+What odor is more common in the poisonous mushrooms or edible mushrooms? 
+Posible odor values: almond=a, anise=l, creosote=c, fishy=y, foul=f, musty=m, none=n, pungent=p, spicy=s
+```{r}
+count1 = table(Mushrooms1$classification, Mushrooms1$odor)
+t = as.data.frame(count1)
+names(t)[1] = 'classification'
+names(t)[2] = 'odor'
+t
+```
+After studying the data set, I found two relevant attributes, habitat and odor that can provide additional information to determine of whether a particular mushroom is poisonous or edible.
+ 
