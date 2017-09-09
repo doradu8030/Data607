@@ -1,0 +1,52 @@
+---
+title: "RandSQL"
+author: "Durley Torres-Marin"
+date: "September 8, 2017"
+output: html_document
+---
+## How to import SQL information to a data frame, from postgreSQL 
+PostgreSQL use in R RPostgrade package
+Load DBI package: It is requiered
+```{r}
+library("DBI", lib.loc="~/R/win-library/3.4")
+library("RPostgreSQL", lib.loc="~/R/win-library/3.4")
+library(sqldf)
+con = dbConnect(PostgreSQL(), user="postgres", password="Doradu8030",
+                 host="localhost", port=5432, dbname="mysql")
+```
+
+I used two different methods to populate my tables in SQL
+
+   First: I loaded a .csv file from postgreSQL using the instruction "COPY"
+   script name : Assig2.sql
+   
+   Second: I used  the INSERT instruction  script name :Assigwinsert.sql
+
+Being more eficient the first method especially for large files already populated. However, I found useful and faster the second method if a conditional and repetitive routine like IF or FOR will be added to populate tables more efficiently (automate process).  
+
+For booth, the first and second method, I created two .sql scripts to show this. 
+
+## Getting data from my first table 
+```{r}
+topmovies = dbGetQuery(con,"select * from movie_info ")
+names(topmovies) = c("Movie_Title", "Date_Release"," Director")
+topmovies
+```
+## Getting data from my second table 
+```{r}
+movierate = dbGetQuery(con,"select * from movie_rate ")
+names(movierate) = c("Movie_Title", "Scale 1-5")
+movierate
+```
+## I created a third table using INSERT INTO SELECT, it requires that data types in source and target tables match to show aditional information.
+
+```{r}
+result = dbGetQuery(con,"select * from movie_res ")
+names(result) = c("Movie_Title", "Scale 1-5","Date_Release", "Director")
+result
+```
+```{r}
+X<-dbDisconnect(con)
+X
+```
+
