@@ -1,0 +1,112 @@
+---
+title: "Chap 8. Regular Expressions and Essential String Funtions"
+author: "Durley Torres-Marin"
+date: "September 16, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(stringr)
+raw.data <-"555-1239Moe Szyslak(636) 555-0113Burns, C. Montgomery555-6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson, Homer5553642Dr. Julius Hibbert" 
+```
+# Assignment #3
+# Strings Functions
+The vector names stores the extracted names
+```{r}
+name <- unlist(str_extract_all(raw.data, "[[:alpha:]., ]{2,}"))
+```
+1. Use the tools of Chap 8. Regular expresions and essential string            functions to rearrange the         vector so that all elements conform to the       standar first_name last_name.
+
+# Extracting the First and Last name
+```{r}
+invert.names <- str_split(name, ", ", simplify = TRUE)
+correct.names <- str_c(invert.names[, 2], invert.names[, 1])
+correct.names <- str_replace(correct.names, "([a-z])([A-Z])", "\\1 \\2")
+
+first.name <- unlist(str_extract(correct.names, "[[:punct:]][[:blank:]][[:alpha:]]{2} "))
+first.name[is.na(first.name)] <- unlist(str_extract(correct.names, "[[:alpha:]]+")[is.na(first.name)])
+
+last.name <- str_extract(correct.names,"[[:alpha:]]+($|,{5,})")
+data.frame(first.name = first.name, last.name = last.name)
+```
+
+2. Construct a logical vector indicating whether a character has a title (i.e., Rev. and Dr.)
+```{r}
+str_detect(correct.names, "[a-zA-Z]{2,4}[.]")
+```
+
+```{r}
+title <- str_detect(correct.names, "[[:alpha:]]{2}\\. ")
+data.frame(correct.names, title)
+```
+
+3. Construct a logical vector indicating whether a character has a second name
+
+
+```{r}
+second.name <- str_detect(name, "[[:alpha:]]{1}\\, [:upper:]. ")
+#second.name
+data.frame(correct.names, second.name)
+```
+4. Describe the types of strings that conform to the following regular expressions and construct an example       that is matched by the regular expression.
+
+    4.1 [0-9] + \$
+        [0-9] any digit will be matched
+        [0-9] + any digit will be matched "+" means the preceding item any or more times
+        \\$   look for the character preceding \\ to match them literally 
+    
+  
+```{r}
+cost <- c("$2500", "$450", "$786", "$345$", "12$", "$890")
+str_extract(cost, "[0-9]+\\$")
+# Generic form
+str_extract(cost, "[:alnum:]+\\$")
+```            
+    4.2 \\b[a-z]{1,4}\\b
+        \\b   look for specific location of matches at the begining and end of any word character
+        [a-z] matches all sequences of lowercase letters 
+        {1,4} quantifiers, it specifies the match from 1 to 4 letters, number of repetitions for a sequence or               characters.
+```{r}
+body.parts <- c("stomach", "Head", "breast", "gall bladder", "Gum", "fallopian tube")
+str_extract(body.parts, "\\b[a-z]{1,4}\\b")
+#removing the NA values we can use the command;
+unlist(str_extract_all(body.parts, "\\b[a-z]{1,4}\\b"))
+```
+    4.3 .*?\\.txt$
+        Backreferencing
+        .*?   matches regarles what it comes in between from 0 to more times 
+        \\.txt$   look for the character preceding \\ to match them literally
+```{r}
+type.files <- c("web.Html", "mushrooms.txt", "smokers.csv", "txtfiletxt" , "txtfile.txt")
+unlist(str_extract_all(type.files, ".*?\\.txt$"))
+```
+
+    4.4 \\d{2}/\\d{2}/\\d{4}
+        It will be matched 2 digits then 2 digits then 4 digits separate by "/".  It will be character vector         of dates
+```{r}
+dobs <- c(" 19 Sept 1971", "10 January 1980", "02-Feb-1951", "01/28/1952", "05.28.1974")
+dates = "\\d{2}/\\d{2}/\\d{4}"
+unlist(str_extract_all(dobs, dates))
+```
+    4.5 <(.+?)>.+?</\\1>
+        The expresion enclosed between the begining tag < and ending tag > extracts a exact character                 matching;
+        and the expresion >.+?< extracts any alphanumeric string in between the tags > <
+```{r}
+elements <- c("<triangule>web.Html</circle>", "<line> several string samples 9 </line>")
+unlist(str_extract_all(elements, "<(.+?)>.+?</\\1>"))  
+```
+#Optional Chap 8. Exercise 9
+
+  The following code hides a secret message. Crack it with R and regular expressions. Hint: Some of the         characters are more revealing than others! The code snippet is also available in the materials at             www.r-datacollection.com.
+
+```{r}
+secret.message <- c("clcopCow1zmstc0d87wnkig7OvdicpNuggvhryn92Gjuwczi8hqrfpRxs5Aj5dwpn0TanwoUwisdij7Lj8kpf03AT5Idr3coc0bt7yczjatOaootj55t3Nj3ne6c4Sfek.r1w1YwwojigOd6vrfUrbz2.2bkAnbhzgv4R9i05zEcrop.wAgnb.SqoU65fPa1otfb7wEm24k6t3sR9zqe5fy89n6Nd5t9kc4fE905gmc4Rgxo5nhDk!gr")
+#unlist(str_match_all(secret.message, "[A-Za-z]"))
+#unlist(str_match_all(secret.message, "[[:alpha:]]"))
+#unlist(str_match_all(secret.message, "[:lower:]"))
+unlist(str_match_all(secret.message, "[:upper:]"))
+```
+The secret message is " CONGRATULATIONS YOU ARE A SUPER NERD"
