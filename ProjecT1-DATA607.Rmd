@@ -125,5 +125,5 @@ However, postgreSQL will present this message error;
 If the final file will be exported to postgreSQL don't use those separators, postgreSQL wouldn't recognized (.),(-) as part of a variable name.
 
 ```{r}
-write.csv(tournament.rounds, file = "C:/Users/Dora/CUNY/DATA607-Data Acquisition/Project1/tournamentfinal.csv")
+write.csv(foutput, file = "C:/Users/Dora/CUNY/DATA607-Data Acquisition/Project1/tournamentfinal.csv")
 ```
