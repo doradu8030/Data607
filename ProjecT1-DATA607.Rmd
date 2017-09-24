@@ -1,0 +1,129 @@
+---
+title: "ProjecT1-DATA607"
+author: "Durley Torres-Marin"
+date: "September 23, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(stringr)
+library(qdapTools)
+library(stringi)
+```
+# Removing Special Characters in R from a text file
+Your job is to create an R Markdown file that generates a .CSV file (that could for example be imported into a SQL database) with the following information for all of the players:
+Player's Name
+Player's State
+Total Number of Points
+Player's Pre-Rating
+and Average Pre Chess Rating of Opponents
+
+For the first player, the information would be:Gary Hua, ON, 6.0,1794, 1605
+1605 was calculated by using the pre-tournament opponents' ratings of 1436, 1563, 1600, 1610, 1649, 1663, 1716, and dividing by the total number of games played.
+
+Below are different block of commands I try to use to create a table and manipulate special characters from the text file; however I found much easier work with a vectors. Those command also removes special characters from a text file. 
+
+"tournament.res <- read.table("https://raw.githubusercontent.com/doradu8030/Data607/master/tournamentinfo.txt", header=FALSE, sep="\n")
+tournament.res <- readLines("tournamentinfo.txt")
+str_replace_all(tournament.res, "[[:punct:]]", " ")
+tournament.res<- tournament.res[-(1:4)]
+tournament.res<-setdiff(tournament.res,lines)
+tournament.res<-str_replace_all(tournament.res," {2}","")
+tournament.res<- str_replace_all(tournament.res, "([\n /])", "")
+gsub("[^[:alnum:][:blank:]+?&/\\-]", "", tournament.res)
+gsub("[[:punct:]]", " ", tournament.res)
+regex ("[[:punct:]]", tournament.res)""
+
+
+I use the command read.delim which removes most of the special characters from the text file
+
+```{r}
+tournament.res <- read.delim("https://raw.githubusercontent.com/doradu8030/Data607/master/tournamentinfo.txt", header=FALSE, sep="|", skip = 4, stringsAsFactors = FALSE)
+head(tournament.res)
+```
+After several attempts I created only one data frame with all fields needed.
+```{r}
+tournament.rounds <- data.frame(
+            playername = tournament.res$V2[c(TRUE, FALSE, FALSE)],
+            playerstate = tournament.res$V1[c(FALSE, TRUE, FALSE)],
+            totnumpoints = round(as.numeric(tournament.res$V3[c(TRUE, FALSE, FALSE)]), 1),
+            round1 = as.numeric(str_extract(tournament.res$V4[c(TRUE, FALSE, FALSE)],regex("[:digit:]+"))), 
+            round2 = as.numeric(str_extract(tournament.res$V5[c(TRUE, FALSE, FALSE)],regex("[:digit:]+"))),
+            round3 = as.numeric(str_extract(tournament.res$V6[c(TRUE, FALSE, FALSE)],regex("[:digit:]+"))),
+            round4 = as.numeric(str_extract(tournament.res$V7[c(TRUE, FALSE, FALSE)],regex("[:digit:]+"))),
+            round5 = as.numeric(str_extract(tournament.res$V8[c(TRUE, FALSE, FALSE)],regex("[:digit:]+"))),
+            round6 = as.numeric(str_extract(tournament.res$V9[c(TRUE, FALSE, FALSE)],regex("[:digit:]+"))),
+            round7 = as.numeric(str_extract(tournament.res$V10[c(TRUE, FALSE, FALSE)],regex("[:digit:]+"))),
+            prerating = integer(64),
+            avgrateoppon = integer(64))
+            # the definicion of interger only allows the value 64 which corresponde             to the number of rows in the data set
+```
+How the instruction c(TRUE,FALSE,FALSE) included above works; 
+See the original file 
+```{r}
+head(tournament.res)
+```
+Note that the information needed to be extrated is found every third row; row 1,4,7 and so on. 
+see the changes when I added logical values to the c vector
+```{r}
+playername = tournament.res$V2[c(TRUE)]
+head(playername)
+```
+```{r}
+playername = tournament.res$V2[c(TRUE, FALSE)]
+head(playername)
+```
+```{r}
+playername = tournament.res$V2[c(TRUE, FALSE, TRUE)]
+head(playername)
+```
+Now I will convert as numeric the column "prerating"";  at firt extract the character Ex."R: 1553" and assig it to a variable then R allows youto convert this variable as numeric and extracted as numeric as well
+                   
+```{r}
+test <- str_extract(tournament.res$V2[c(FALSE, TRUE, FALSE)], "R:[:blank:]+[:digit:]+")
+tournament.rounds$prerating <- as.numeric(str_extract(test, "[:digit:]+"))
+head(test)
+head(tournament.rounds$prerating)
+```
+The final output file is;
+```{r}
+tournament.rounds
+```
+```{r}
+for (i in 1:64) {
+       tournament.rounds$round1[i] <- tournament.rounds$prerating[tournament.rounds$round1[i]]
+       tournament.rounds$round2[i] <- tournament.rounds$prerating[tournament.rounds$round2[i]]
+       tournament.rounds$round3[i] <- tournament.rounds$prerating[tournament.rounds$round3[i]]
+       tournament.rounds$round4[i] <- tournament.rounds$prerating[tournament.rounds$round4[i]]
+       tournament.rounds$round5[i] <- tournament.rounds$prerating[tournament.rounds$round5[i]]
+       tournament.rounds$round6[i] <- tournament.rounds$prerating[tournament.rounds$round6[i]]
+       tournament.rounds$round7[i] <- tournament.rounds$prerating[tournament.rounds$round7[i]]
+}
+```
+```{r}
+  for (i in 1:64) {
+       tournament.rounds$avgrateoppon[i] <- rowSums(tournament.rounds[i, 4:10], na.rm = TRUE) %/% 7
+  }
+
+foutput <- tournament.rounds[c(1,2,3,11,12)]
+names(foutput) = c("PlayerName","PlayerState","NumofPoints","Pre-Rating","AvgRatingOp")
+foutput
+```
+Then after all information needed is cleaned up, the final file could be save as csv file that could be exported or copy into a postgreSQL or MySQL. 
+Note the R allows to work with dots (.) or underscore (-) in between of a variable names Ex.player.state
+However, postgreSQL will present this message error; 
+       
+       player.state in posgreSQL
+       ERROR:  syntax error at or near "."
+       LINE 5:   player.name character(20) NOT NULL,
+                       
+       
+If the final file will be exported to postgreSQL don't use those separators, postgreSQL wouldn't recognized (.),(-) as part of a variable name.
+
+```{r}
+write.csv(tournament.rounds, file = "C:/Users/Dora/CUNY/DATA607-Data Acquisition/Project1/tournamentfinal.csv")
+```
