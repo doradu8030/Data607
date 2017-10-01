@@ -1,0 +1,75 @@
+---
+title: "Tidy and Transform Data"
+author: "Durley Torres-Marin"
+date: "September 30, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##install.packages("tidyverse")
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+##Data structure
+arrival.delays <- read.csv("https://raw.githubusercontent.com/doradu8030/Data607/master/Arrival%20delays%20by%20Airline.csv", stringsAsFactor = FALSE)
+arrival.delays
+```
+## Tyding the Data and Manipulating string
+This chunk is replacing the character " " to "_" into the word "on time" 
+Adding the airline name to the two rows whitout it
+removing the empty row 
+```{r}
+arrival.delays[2,1] <- arrival.delays[1,1]
+arrival.delays[5,1] <- arrival.delays[4,1]
+arrival.delays[,2] <- sapply(arrival.delays[,2], str_replace, " ", "_")
+
+## *removing the empty row*
+arrival.delays <- na.omit(arrival.delays) 
+arrival.delays
+```
+## Naming Columns
+```{r}
+colnames(arrival.delays)[1] <- "Airline"
+colnames(arrival.delays)[2] <- "Status"
+arrival.delays
+```
+## Melting the data : List of columns from 3 to 7 that fall into a variable "City"
+```{r}
+draft.table <- gather(arrival.delays, "City", "Count", 3:7)
+draft.table$City <- str_replace(draft.table$City, "[.]", " ")
+draft.table
+```
+
+#Analysis
+
+Total flights delayed group by Airline and City 
+```{r}
+f.arrival.delayed <- spread(draft.table, Status, Count)
+totaldelayed <- f.arrival.delayed %>%
+  group_by(Airline, City) %>% 
+  summarise(fligh.delay = sum(delayed))
+totaldelayed
+```
+Total flights on-time group by Airline and City 
+```{r}
+f.arrival.ontime <- spread(draft.table, Status, Count)
+totalontime <- f.arrival.delayed %>%
+  group_by(Airline, City) %>% 
+  summarise(flight.ontime = sum(on_time))
+totalontime
+```
+Total of flights delayed and on-time by Airline & shows
+What percentage of flights are delayed by Airline
+What percentage of flights are on-time by Airline
+```{r}
+totalstatus <- f.arrival.delayed %>% 
+  group_by(Airline) %>%
+  summarise(tot_delayed=sum(delayed),tot_on_time=sum(on_time),Perc_delay=round((tot_delayed/(tot_delayed+tot_on_time))*100, 2),Perc_on_time=round((tot_on_time/(tot_delayed+tot_on_time))*100, 2))
+totalstatus
+```
+
