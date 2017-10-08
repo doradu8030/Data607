@@ -8,12 +8,14 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Project 2: Choose three of the wide "data sets" identified in Week 6 discussion items and practice tyding and Transformation of those data sets. 
+##Project 2:
+Choose three of the wide "data sets" identified in Week 6 discussion items and practice tyding and Transformation of those data sets. 
 
 The goal of this assignment is to give you practice in preparing different datasets for downstream analysis work.
 
-DATASET 1
-1)	U.S Chronic Disease indicators : https://catalog.data.gov/dataset/u-s-chronic-disease-indicators-cdi-e50c9
+###DATASET 1 :U.S Chronic Disease indicators
+
+https://catalog.data.gov/dataset/u-s-chronic-disease-indicators-cdi-e50c9
 
 *Dataset description:* The Center of Disease Control and Prevention provides and report chronic diseases data that are relevant information for hospitals, clinics and providers that allows states ,territories and metropolitan areas to access and tackle some indicators. 
 *Dataset created date:* Jun 2, 2016
@@ -25,7 +27,7 @@ And many other government organizations that collects, analyzes and distributes 
 		
 This dataset is wide enough containing *403984* observations. However, I used postgreSQL to create a small table called state_chronic filtering the observations where state = "NY" and Year is between 2015 and 2016.
 
-#Setting up enviroment
+#####Setting up enviroment
 ```{r}
 library("DBI", lib.loc="~/R/win-library/3.4")
 library("RPostgreSQL", lib.loc="~/R/win-library/3.4")
@@ -36,12 +38,12 @@ library(stringr)
 library(dplyr)
 library(ggplot2)
 ```
-#Connectting with database  
+#####Connectting with database  
 ```{r}
 con = dbConnect(PostgreSQL(), user="postgres", password="Doradu8030",
                  host="localhost", port=5432, dbname="mysql")
 ```
-# Getting data from my new table state_chronic
+#####Getting data from my new table state_chronic
 ```{r}
 NY_chronic_ind = dbGetQuery(con,"select * from state_chronic")
 
@@ -69,7 +71,7 @@ StratificationCategoryID1: categories in which each observation is classified as
  
 
 After I studied each variable selected, I identified the variables "Question" and "Stratification1" that would need to be transformed for meaningful use.
-#Data transformation
+
 ```{r}
 #droping NA values
 table1 <- as_tibble(NY_chronic_ind)
@@ -85,14 +87,12 @@ table2$stratificationid1 <- str_replace(table2$stratificationid1, "GENM", "MALE"
 dim(table2)
 
 ```
-#Tyding the data
 ```{r}  
 g_topic <- group_by(s_chronic_ind,topic)
 c_topic <- count(s_chronic_ind,topic) 
 #number of obsevartions by topic
 c_topic
 ```
-
 ```{r}
 table2$datavalue <-  as.numeric(table2$datavalue)
 fplot <- table2 %>% 
@@ -105,15 +105,13 @@ ggplot(fplot, aes(topic, topsum))+
   theme(axis.text.x=element_text(angle=90, hjust=1))+ coord_flip()+
   ggtitle('Posible causes of Death in New York')
 ```
-
-
 ```{r}  
 g_topic <- group_by(s_chronic_ind,topic)
 c_topic <- count(s_chronic_ind,topic) 
 s_value <- summarise(s_chronic_ind, avg = mean(datavalue))
 c_topic
 ```
-Data set 2 : Mortatily rates
+###Data set 2 : Mortatily rates
 Getting data 
 ```{r}
 mort <- read.csv("C:/Users/Dora/CUNY/DATA607-Data Acquisition/Project2/MORT_READM_July2017.csv")
@@ -140,7 +138,7 @@ ggplot(plt2, aes(Measure.as.Posted.on.Hospital.Compare, facSum1))+
   ggtitle('Hosp. Readmission Deaths ')
 ```
 
-Data set 3 : Quality Care
+###Data set 3 : Quality Care
 A list of the state averages for the HCAHPS survey responses. HCAHPS (the Hospital Consumer Assessment of Healthcare Providers and Systems) is a patient satisfaction survey required by CMS (the Centers for Medicare and Medicaid Services) for all hospitals in the United States. The Survey is for adult inpatients, excluding psychiatric patients.
 Getting data 
 ```{r}
@@ -163,16 +161,10 @@ plt <- Qcare %>%
 ggplot(plt, aes(HCAHPS.Question, facSum))+
 geom_bar(stat = 'identity') +  theme(axis.text.x=element_text(angle=90, hjust=1))+ coord_flip() +
   ggtitle('Quality of Treatment')
-
 ```
+![](C:\Users\Dora\CUNY\DATA607-Data Acquisition\Project2\Qcare.PNG)
 
 For a large plot as our peers indicated I had to call ggplot() from the console and save the image from the 'plot' tab on the right bottom pane of RStudio. Change the size. Paste the image in the RMD file. Make the chunk option for the ggplot call in the RMD file set as eval=FALSE.
-
-```{r}
-mypath <- file.path("C:","Users","Dora","CUNY","DATA607-Data Acquisition","Project2",paste("Qcare", ".png", sep = ""))
-png(file= "mypath", width = 850, height = 570, units = "px", pointsize = 12,
-    bg = "white", res = NA, family = "", restoreConsole = TRUE)
-```
 
 ```{r}
 X<-dbDisconnect(con)
