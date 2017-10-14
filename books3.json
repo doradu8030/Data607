@@ -1,14 +1,14 @@
 {"favorite books":[
 	{
 	"title": "Think Big: Unleashing Your Potential for Excellence",
-	"authors": ["Ben Carson MD", "Cecil Murphey-Contributor"],
+	"authors": ["Ben Carson MD", "Cecil Murphey (Contributor)"],
 	"topic": "Self Motivation",
 	"published_year": "2015",
 	"ISBN": "978-0310343363"
 	},
 	{
 	"title": "You Can't Teach a Kid to Ride a Bike at a Seminar",
-	"author": "David H.Sandler and John Hayes",
+	"author": "David H Sandler and John Hayes",
 	"topic": "Self-Confidence",
 	"published_year": "1996",
 	"ISBN": "978-0967179902"
