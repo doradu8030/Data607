@@ -7,17 +7,17 @@
 	"ISBN": 978-0310343363
 	},
 	{
-	"Book Title": "The Signal and the Noise",
-	"Authors": "Nate Silver",
-	"Cover Type": "Soft",
-	"Subject": "Science and Math",
-	"Pages": 560
+	"title": "You Can't Teach a Kid to Ride a Bike at a Seminar",
+	"author": "David H.Sandler,John Hayes",
+	"topic": "Self-Confidence",
+	"published_year": "1996",
+	"ISBN": 978-0967179902
 	},
 		{
-	"Book Title": "Automated Data Collection with R",
-	"Authors": ["Simon Munzert", "Christian Rubba", "Peter Meibner", "Dominic Nyhuis"],
-	"Cover Type": "Hard",
-	"Subject": "Computer Science",
-	"Pages": 452
+	"title":"R for Data Science",
+	"author": "Garrett Grolemund, Hadley Wickham",
+	"topic": "Programing",
+	"published_year": "2017",
+	"ISBN": 978-1491910399
 	}]
 }
