@@ -1,0 +1,171 @@
+---
+title: "Lab4b"
+author: "Durley Torres-Marin"
+date: "October 12, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+##Foundations for Statistical Inference - Confidence Intervals
+##Sampling from Ames, Iowa
+
+If you have access to data on an entire population, say the size of every house in Ames, Iowa, it's straight forward to answer questions like, "How big is the typical house in Ames?" and "How much variation is there in sizes of houses?". If you have access to only a sample of the population, as is often the case, the task becomes more complicated. What is your best guess for the typical size if you only know the sizes of several dozen houses? This sort of situation requires that you use your sample to make inference on what your population looks like.
+The data
+
+In the previous lab, ``Sampling Distributions'', we looked at the population data of houses from Ames, Iowa. Let's start by loading that data set.
+
+```{r}
+setwd("~/R/Lab4b")
+load("more/ames.RData")
+```
+In this lab we'll start with a simple random sample of size 60 from the population. Specifically, this is a simple random sample of size 60. Note that the data set has information on many housing variables, but for the first portion of the lab we'll focus on the size of the house, represented by the variable Gr.Liv.Area.
+```{r}
+population <- ames$Gr.Liv.Area
+samp <- sample(population, 60)
+summary(samp)
+min(samp)
+max(samp)
+```
+###Exercise 1
+Describe the distribution of your sample. What would you say is the "typical" size within your sample? Also state precisely what you interpreted "typical" to mean.
+
+The distribution in the sample of size 60 is moderately skewed to the right and unimodal. The typical size are the mean and the median. It is the center of the distribution.
+
+The mean is 1553, the range is 756 to 3390. 
+
+```{r}
+hist(samp, breaks = 25)
+```
+
+###Exercise 2
+Would you expect another student's distribution to be identical to yours? Would you expect it to be similar? Why or why not?
+
+It could be similar as long as the sample size is the same and it is taken from the same sample population.
+
+##Confidence intervals
+
+One of the most common ways to describe the typical or central value of a distribution is to use the mean. In this case we can calculate the mean of the sample using,
+```{r}
+sample_mean <- mean(samp)
+mean(population)
+sample_mean
+```
+Return for a moment to the question that first motivated this lab: based on this sample, what can we infer about the population? Based only on this single sample, the best estimate of the average living area of houses sold in Ames would be the sample mean, usually denoted as x¯
+
+(here we're calling it sample_mean). That serves as a good point estimate but it would be useful to also communicate how uncertain we are of that estimate. This can be captured by using a confidence interval.
+
+We can calculate a 95% confidence interval for a sample mean by adding and subtracting 1.96 standard errors to the point estimate (See Section 4.2.3 if you are unfamiliar with this formula).
+```{r}
+se <- sd(samp) / sqrt(60)
+lower <- sample_mean - 1.96 * se
+upper <- sample_mean + 1.96 * se
+c(lower, upper)
+```
+
+This is an important inference that we've just made: even though we don't know what the full population looks like, we're 95% confident that the true average size of houses in Ames lies between the values lower and upper. There are a few conditions that must be met for this interval to be valid.
+
+###Exercise 3
+For the confidence interval to be valid, the sample mean must be normally distributed and have standard error s/n?????????. 
+
+What conditions must be met for this to be true? 
+The sample observations are indenpendent.
+The sample size is larger that 30
+The population distribution is not strongly skewed
+the larger the sample the more lenient we can be with the sample's skew
+
+##Confidence levels
+
+###Exercise 4
+What does "95% confidence" mean? If you're not sure, see Section 4.2.2.
+
+It provides a guide for how large we should make the confidence interval
+
+In this case we have the luxury of knowing the true population mean since we have data on the entire population. This value can be calculated using the following command:
+```{r}
+mean(population)
+```
+###Exercise 5
+Does your confidence interval capture the true average size of houses in Ames? If you are working on this lab in a classroom, does your neighbor's interval capture this value?
+
+yes, the population mean of 1499.69 falls in the 95% confidence interval [1405.098, 1701.169]
+
+###Exercise 6
+Each student in your class should have gotten a slightly different confidence interval. What proportion of those intervals would you expect to capture the true population mean? Why? If you are working in this lab in a classroom, collect data on the intervals created by other students in the class and calculate the proportion of intervals that capture the true population mean.
+
+### collecting data on the intervals for a sample size of 20 random samples
+```{r}
+samp_mean1 <- rep(NA, 20)
+samp_sd1 <- rep(NA, 20)
+n <- 60
+for(i in 1:20){
+  samp1 <- sample(population, n) 
+  samp_mean1[i] <- mean(samp1)   
+  samp_sd1[i] <- sd(samp1)        
+}
+lower_vector <- samp_mean1 - 1.96 * samp_sd1 / sqrt(n) 
+upper_vector <- samp_mean1 + 1.96 * samp_sd1 / sqrt(n)
+```
+Using R, we're going to recreate many samples to learn more about how sample means and confidence intervals vary from one sample to another. Loops come in handy here (If you are unfamiliar with loops, review the Sampling Distribution Lab).
+
+Here is the rough outline:
+
+    Obtain a random sample.
+    Calculate and store the sample's mean and standard deviation.
+    Repeat steps (1) and (2) 50 times.
+    Use these stored statistics to calculate many confidence intervals.
+
+But before we do all of this, we need to first create empty vectors where we can save the means and standard deviations that will be calculated from each sample. And while we're at it, let's also store the desired sample size as n.
+```{r}
+samp_mean <- rep(NA, 50)
+samp_sd <- rep(NA, 50)
+n <- 60
+```
+Now we're ready for the loop where we calculate the means and standard deviations of 50 random samples.
+```{r}
+for(i in 1:50){
+  samp <- sample(population, n) # obtain a sample of size n = 60 from the population
+  samp_mean[i] <- mean(samp)    # save sample mean in ith element of samp_mean
+  samp_sd[i] <- sd(samp)        # save sample sd in ith element of samp_sd
+}
+```
+Lastly, we construct the confidence intervals.
+```{r}
+lower_vector <- samp_mean - 1.96 * samp_sd / sqrt(n) 
+upper_vector <- samp_mean + 1.96 * samp_sd / sqrt(n)
+```
+Lower bounds of these 50 confidence intervals are stored in lower_vector, and the upper bounds are in upper_vector. Let's view the first interval.
+```{r}
+c(lower_vector[1], upper_vector[1])
+```
+##On your own
+
+1. Using the following function (which was downloaded with the data set), plot all
+intervals. What proportion of your confidence intervals include the true population mean? Is this proportion exactly equal to the confidence level? If not, explain why.
+
+4 of these 50 intervals did not capture the true mean 1499.69. The intervals should have 92% confidence to include the population mean, It is a good approximation of the confidence level.
+
+```{r}
+    plot_ci(lower_vector, upper_vector, mean(population))
+```
+
+
+2. Pick a confidence level of your choosing, provided it is not 95%. What is the appropriate critical value?
+
+The appropiate confidence value besides 95% is 99% confidence interval and critical value for this confidence interval is 2.58
+
+3. Calculate 50 confidence intervals at the confidence level you chose in the previous question. You do not need to obtain new samples, simply calculate new intervals based on the sample means and standard deviations you have already collected. Using the plot_ci function, plot all intervals and calculate the proportion of intervals that include the true population mean. How does this percentage compare to the confidence level selected for the intervals?
+
+All the confidence values fall in the population mean. As I choose 99% confidence level it seems we have a 100 % confidence leve. 
+
+```{r}
+lower_vector <- samp_mean - 2.58 * samp_sd / sqrt(n) 
+upper_vector <- samp_mean + 2.58 * samp_sd / sqrt(n)
+plot_ci(lower_vector, upper_vector, mean(population))
+```
