@@ -1,5 +1,0 @@
-﻿[
-	{"title":"Think Big: Unleashing Your Potential for Excellence","author":"Ben Carson M.D,Cecil Murphey-Contributor","topic":"Personal Formula for success,Self Motivation,Hope for Good things and be honest","published_year":"2015","ISBN":"978-0310343363"}, 
-	{"title":"You Can't Teach a Kid to Ride a Bike at a Seminar","author":"David H.Sandler,John Hayes","topic":"Self-Confidence,Higher achivement,buyer-seller dance","published_year":"1996","ISBN":"978-0967179902"},
-	{"title":"R for Data Science","author":"Garrett Grolemund, Hadley Wickham","topic":"Clean data,Transforming data,Visualise","published_year":"2017","ISBN":"978-1491910399"}
-]
