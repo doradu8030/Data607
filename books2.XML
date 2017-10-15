@@ -3,26 +3,25 @@
 	<book>
 	  <row>
 
-		    <title>Fly Fishing the Mountain Lakes</title>
-		    <isbn>978-1585747740</isbn>
-		    <author>Gary Lafontaine</author>
-		    <publication_date>05/01/2003</publication_date>
-		    <pages>192</pages>
+		    <title>Think Big: Unleashing Your Potential for Excellence</title>
+		    <author>Ben Carson MD</author>
+		    <topic>Self Motivation</topic>
+		    <publishedyear>2015</publishedyear>
+		    <isbn>978-0310343363</isbn>
 	  </row>
 	  <row>
-		    <title>Tactics for Trout</title>
-		    <isbn>978-0811713399</isbn>
-		    <author>Rick Hafale, Dave Hughes, Skip Morris</author>
-
-		    <publication_date>11/01/2014</publication_date>
-		    <pages>240</pages>
+		    <title>You Can't Teach a Kid to Ride a Bike at a Seminar</title>
+		    <author>David H Sandler and John Hayes</author>
+		    <topic>Self Motivation</topic>
+		    <publishedyear>1996</publishedyear>
+		    <isbn>978-0967179902</isbn>
 	  </row>
 	  <row>
-		    <title>Caddisflies</title>
-		    <isbn>978-0941130981</isbn>
-		    <author>Gary Lafontaine</author>
-		    <publication_date>04/28/1989</publication_date>
-		    <pages>336</pages> 
+		    <title>R for Data Science</title>
+		    <author>Garrett Grolemund and Hadley Wickham</author>
+		    <topic>Programming</topic>
+		    <publishedyear>2017</publishedyear>
+		    <isbn>978-1491910399</isbn>
 	  </row>
   	</book>
 </root>
