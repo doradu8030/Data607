@@ -1,21 +1,24 @@
 [
 	{
 	"title": "Think Big: Unleashing Your Potential for Excellence",
-	"author": "Ben Carson MD, Cecil Murphey (Contributor)",
+	"authors": 
+			[{"author:"Ben Carson MD"}, {"author":"Cecil Murphey (Contributor)"}],
 	"topic": "Self Motivation",
 	"published_year": "2015",
 	"ISBN": "978-0310343363"
 	},
 	{
 	"title": "You Can't Teach a Kid to Ride a Bike at a Seminar",
-	"author": "David H Sandler and John Hayes",
+	"authors":
+			[{"author":"David H Sandler"},{"author":"John Hayes"}],
 	"topic": "Self-Confidence",
 	"published_year": "1996",
 	"ISBN": "978-0967179902"
 	},
 		{
 	"title":"R for Data Science",
-	"author": "Garrett Grolemund and Hadley Wickham",
+	"authors": 
+			[{author:":"Garrett Grolemund"},{"author":"Hadley Wickham"}],
 	"topic": "Programing",
 	"published_year": "2017",
 	"ISBN": "978-1491910399"
