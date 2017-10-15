@@ -1,7 +1,6 @@
 ﻿[
-	{
-	"title": "Think Big: Unleashing Your Potential for Excellence",
-	"author":
+	{"title": "Think Big: Unleashing Your Potential for Excellence",
+	"authors":
 			[{"author:":"Ben Carson MD"},{"author":"Cecil Murphey (Contributor)"}],
 	"topic": "Self Motivation",
 	"published_year": "2015",
@@ -9,7 +8,7 @@
 	},
 	{
 	"title": "You Can't Teach a Kid to Ride a Bike at a Seminar",
-	"author":
+	"authors":
 			[{"author:":"David H Sandler"},{"author":"John Hayes"}],
 	"topic": "Self-Confidence",
 	"published_year": "1996",
@@ -17,7 +16,7 @@
 	},
 		{
 	"title":"R for Data Science",
-	"author": 
+	"authors": 
 			[{author:":"Garrett Grolemund"},{"author":"Hadley Wickham"}],
 	"topic": "Programming",
 	"published_year": "2017",
