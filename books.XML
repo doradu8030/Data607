@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0"?>
-<Favorite Books>
+<Catalog>
 	<book id="01">
 		<title>Think Big: Unleashing Your Potential for Excellence</title>
 		<author>Ben Carson MD,Cecil Murphey (Contributor)</author>
@@ -24,4 +24,4 @@
 		<publishedyear>2017</publishedyear>
 		<ISBN>978-1491910399</ISBN>
 	 </book>
-</Favorite Books>
+</Catalog>
