@@ -1,26 +1,26 @@
 ﻿<?xml version="1.0"?>
-<catalog>
-	<book id="01">
+<Favorite Books>
+	<book id="1">
 		<title>Think Big: Unleashing Your Potential for Excellence</title>
-		<author>Ben Carson M.D,Cecil Murphey (Contributor)</author>
-		<topic>Personal Formula for success,Self Motivation,Hope for Good things and be honest</topic>
+		<author>Ben Carson MD,Cecil Murphey (Contributor)</author>
+		<topic>Self Motivation</topic>
 		<published_year>2015</published_year>
 		<ISBN>978-0310343363</ISBN>
 	</book>
 			
-	<book id="02">
+	<book id="2">
 		<title>You Can't Teach a Kid to Ride a Bike at a Seminar</title>
 		<author>David H.Sandler,John Hayes</author>
-		<topic>Self-Confidence,Higher achivement,buyer-seller dance</topic>
+		<topic>Self-Confidence</topic>
 		<published_year>1996</published_year> 
 		<ISBN>978-0967179902</ISBN>
 
  	 </book>
 
-	 <book id="03">
+	 <book id="3">
 		<title>R for Data Science</title>
 		<author>Garrett Grolemund, Hadley Wickham</author>
-		<topic>Clean data,Transforming data,Visualise</topic>
+		<topic>Programming</topic>
 		<published_year>2017</published_year>
 		<ISBN>978-1491910399</ISBN>
 	 </book>
