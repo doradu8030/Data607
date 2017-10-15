@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<book>
+	  <row>
+
+		    <title>Fly Fishing the Mountain Lakes</title>
+		    <isbn>978-1585747740</isbn>
+		    <author>Gary Lafontaine</author>
+		    <publication_date>05/01/2003</publication_date>
+		    <pages>192</pages>
+	  </row>
+	  <row>
+		    <title>Tactics for Trout</title>
+		    <isbn>978-0811713399</isbn>
+		    <author>Rick Hafale, Dave Hughes, Skip Morris</author>
+
+		    <publication_date>11/01/2014</publication_date>
+		    <pages>240</pages>
+	  </row>
+	  <row>
+		    <title>Caddisflies</title>
+		    <isbn>978-0941130981</isbn>
+		    <author>Gary Lafontaine</author>
+		    <publication_date>04/28/1989</publication_date>
+		    <pages>336</pages> 
+	  </row>
+  	</book>
+</root>
