@@ -4,7 +4,7 @@
 		<title>Think Big: Unleashing Your Potential for Excellence</title>
 		<author>Ben Carson MD,Cecil Murphey (Contributor)</author>
 		<topic>Self Motivation</topic>
-		<published_year>2015</published_year>
+		<publishedyear>2015</publishedyear>
 		<ISBN>978-0310343363</ISBN>
 	</book>
 			
@@ -12,7 +12,7 @@
 		<title>You Can't Teach a Kid to Ride a Bike at a Seminar</title>
 		<author>David H.Sandler,John Hayes</author>
 		<topic>Self-Confidence</topic>
-		<published_year>1996</published_year> 
+		<publishedyear>1996</publishedyear> 
 		<ISBN>978-0967179902</ISBN>
 
  	 </book>
@@ -21,7 +21,7 @@
 		<title>R for Data Science</title>
 		<author>Garrett Grolemund, Hadley Wickham</author>
 		<topic>Programming</topic>
-		<published_year>2017</published_year>
+		<publishedyear>2017</publishedyear>
 		<ISBN>978-1491910399</ISBN>
 	 </book>
 </catalog>
