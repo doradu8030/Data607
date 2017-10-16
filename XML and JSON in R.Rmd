@@ -1,0 +1,93 @@
+---
+title: "XML and JSON"
+author: "Durley Torres-Marin"
+date: "October 14, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Working with XML and JSON inR 
+
+###Load Packages
+```{r}
+knitr::opts_chunk$set(warning=FALSE, 
+                      message=FALSE,
+                      tidy=F,
+                      #comment = "",
+                      dev="png", 
+                      dev.args=list(type="cairo"))
+library(XML)
+library(rjson)
+library(RCurl)
+library(jsonlite)
+library(RJSONIO)
+suppressMessages(library(XML))
+suppressWarnings(library(XML))
+suppressMessages(library(rjson))
+suppressMessages(library(jsonlite))
+suppressWarnings(library(jsonlite))
+suppressPackageStartupMessages(library(jsonlite))
+suppressMessages(library(RJSONIO))
+suppressWarnings(library(RJSONIO))
+```
+
+
+##Reading a HTML file
+```{r}
+books.html <- readLines("https://raw.githubusercontent.com/doradu8030/Data607/master/books.html")
+
+###Finding the lines matching the pattern "<td>...</td>" 
+html.pattern = "<td>([0-9A-Za-z\\., \\(\\)-\\']*)</td>"
+
+###Tyding the file 
+b.content = grep(html.pattern, books.html[1:length(books.html)], value = TRUE)
+b.info <- trimws(unlist(sub("<td>([0-9A-Za-z\\., \\(\\)-\\']*)</td>", "\\1", b.content)))
+
+
+```
+
+__Convert in a Data.frame__
+```{r}
+b.infoDF <- cbind.data.frame(split(b.info, rep(1:5, times=length(b.info)/5)), stringsAsFactors=F)
+names(b.infoDF) <- c("Title", "Author", "Topic", "Publication_Year", "ISBN")
+b.infoDF = b.infoDF[-1,]
+
+# HTML Contents as Dataframe
+b.infoDF
+```
+##Reading a XML file
+```{r}
+url.xml = getURL("https://raw.githubusercontent.com/doradu8030/Data607/master/books2.XML")  
+
+xml_df <- xmlToDataFrame(url.xml)
+#book.xml<- xmlParse(xml_df)
+xml_df
+```
+```{r}
+download.file("https://raw.githubusercontent.com/doradu8030/Data607/master/books.XML", destfile = "book_XML.xml")
+  
+book_XML.xml <- xmlParse("book_XML.xml")
+books.XMLDF <- xmlToDataFrame(book_XML.xml)
+books.XMLDF
+```
+###Reading a JSON file
+
+```{r eval = FALSE}
+url.json <-"https://raw.githubusercontent.com/doradu8030/Data607/master/books3.json"
+json.Df <- as.data.frame(fromJSON(url.json))
+
+```
+
+```{r eval = FALSE}
+jsonData <- rjson::fromJSON(file="https://raw.githubusercontent.com/doradu8030/Data607/master/books3.json")
+```
+
+Conclusion
+
+Afert tons of attemps HTML and XML files are identical and also they are less difficult to manipulate than Jason files. Eventhough, I was not able to show the comparision between them, I was able to see in R when i was running chunks individually that the JSON file sctructure is different that XML and HTML files. I left some of the commands to load and parse a JSON file beign that at firts those command were giving the expected result but i could not figure out why after few attemps those commands were given tons of errors. For sure, i learned how to get data from HTML, XML and JSON files and the difference between their structures. 
+
+Also, I notice that the column's data type in JSON is 'chr'while in XML and HTML are 'factors.
+
+
