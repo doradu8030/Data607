@@ -1,0 +1,82 @@
+---
+title: "Assignment Week 7"
+author: "Durley Torres-Marin"
+date: "October 13, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(XML)
+library(rjson)
+library(RCurl)
+library(stringr)  
+library(tidyr)
+library(jsonlite)
+library(RJSONIO)
+library(prettydoc)
+library(jsonlite)
+```
+###Load an HTML file
+```{r}
+url_html <- getURLContent("https://raw.githubusercontent.com/doradu8030/Data607/master/books.html")
+writeLines(url_html)
+
+html_df <- readHTMLTable(url_html, which = 1)
+html_df
+```
+
+##Reading an HTML file
+```{r}
+books.html <- readLines("https://raw.githubusercontent.com/doradu8030/Data607/master/books.html")
+
+td.pattern = "<td>([0-9A-Za-z\\., \\(\\)-\\']*)</td>"
+
+b.content = grep(td.pattern, books.html[1:length(books.html)], value = TRUE)
+
+b.info <- trimws(unlist(sub("<td>([0-9A-Za-z\\., \\(\\)-\\']*)</td>", "\\1", b.content)))
+b.info
+```
+##Structure of HTML
+```{r}
+str(books.html)
+```
+```{r}
+b.infoDF <- cbind.data.frame(split(b.info, rep(1:5, times=length(b.info)/5)), stringsAsFactors=F)
+names(b.infoDF) <- c("Title", "Author", "Theme", "Publication_Year", "ISBN")
+b.infoDF = b.infoDF[-1,]
+
+# HTML Contents as Dataframe
+b.infoDF
+```
+```{r}
+str(b.infoDF)
+```
+##Reading an XML file
+```{r}
+#books.json = JSON.parse()
+download.file("https://raw.githubusercontent.com/doradu8030/Data607/master/books.XML", destfile = "book_XML.xml")
+  
+book_XML.xml <- xmlParse("book_XML.xml")
+books.XMLDF <- xmlToDataFrame(book_XML.xml)
+```
+```{r}
+str(books.XMLDF)
+```
+##Reading an JSON file
+```{r}
+books.json <- getURLContent("https://raw.githubusercontent.com/doradu8030/Data607/master/books1.json")
+writeLines(books.json)
+```
+Conclusion
+
+Afert tons of attemps HTML and XML files are identical and also they are less difficult to manipulate than Jason files. Eventhough, I was not able to show the comparision between them, I was able to see in R when i was running chunks individually that the JSON file sctructure is different that XML and HTML files. I left some of the commands to load and parse a JSON file beign that at firts those command were giving the expected result but i could not figure out why after few attemps those commands were given tons of errors. For sure, i learned how to get data from HTML, XML and JSON files and the difference between their structures. 
+
+Also, I notice that the column's data type in JSON is 'chr'while in XML and HTML are 'factors.
+```{r eval = FALSE}
+json.Df <- as.data.frame(fromJSON(books.json))
+```
