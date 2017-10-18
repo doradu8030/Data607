@@ -1,0 +1,99 @@
+---
+title: "Proj3"
+author: "Durley Torres-Marin"
+date: "October 17, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+suppressPackageStartupMessages(library('XML'))
+suppressPackageStartupMessages(library('rvest'))
+```
+
+```{r}
+# Check if the package is installed. If not, install the package
+if(!require('XML')) {
+  install.packages('XML')
+  library(XML)
+#Loading XML package
+}
+```
+
+```{r}
+# Check if the package is installed. If not, install the package
+if(!require('rvest')) {
+  install.packages('rvest')
+  library(rvest)
+#Loading rvest package
+}
+```
+
+```{r}
+# Check if the package is installed. If not, install the package
+if(!require('stringr')) {
+  install.packages('stringr')
+  library(stringr)
+#Loading string package
+}
+```
+#Data Science Skills
+W.Edward Deming said, "In God we trust, all others must bring data". --Please use data to answer the question "Which skills are the most valued data science skills?". Consider your work as an exploration, there is not necessarilly a "right answer".
+####Giving a short introduction extracted from wikipedia, data still needs to be tidy
+```{r}
+#1. Download the HTML and turn it into an XML file with read_html() 
+def <- read_html("https://en.wikipedia.org/wiki/Data_science")
+#2. Extract specific nodes with html_nodes()
+ext.def <-  html_nodes(def, "div p")
+ext.def %>% html_nodes("ext.def")%>%html_nodes("p , .mbox-text-span")
+
+x<- gsub("\\[[0-9].+\\]", "", str_trim(str_extract(ext.def, ".Data scientist. has become.+")))
+as.vector.factor(x)
+x[17]
+
+```
+
+```{r}
+data.science <- read_html("https://en.wikipedia.org/wiki/Data_science")
+data.science.html <- htmlTreeParse(data.science, useInternal = TRUE) 
+data.science.text <- unlist(xpathApply(data.science.html, '//body', xmlValue))
+gsub("\\[[0-9].+\\]", "", str_trim(str_extract(data.science.text, ".Data scientist. has become.+")))
+```
+![](C:\Users\Dora\Downloads\Data_Science_Process.PNG)
+
+Data science process flowchart from "Doing Data Science", Cathy O'Neil and Rachel Schutt, 2013
+
+```{r eval=FALSE}
+#unable to extrac the image from the website yet using html functions
+data.image <- ext.def %>%
+  
+  html_nodes(a img) %>%
+  html_attr("src")
+data.image
+```
+
+## Web Scrapping 
+
+### Health Care Industry
+
+####Job1
+```{r}
+job1 <- read_html("https://careers.mountsinai.org/find-your-place/jobs/data-science-analyst-population-health-mount-sinai-health-partners-new-york-ny")
+#Job title extracted
+job1.title <- job1 %>% html_nodes("title ") %>% html_text()
+job1.title
+```
+
+####Job 2
+```{r}
+job2 <- read_html("https://cds.nyu.edu/junior-data-scientist-software-working-group/")
+#Job title and quaifications(skills) extracted
+job2.title <- job2 %>% html_nodes("title") %>% html_text()
+job2.skills <- job2 %>% html_nodes("ul p") %>% html_text()
+job2.title
+job2.skills
+
+```
+
